@@ -24,7 +24,7 @@ model Trip {
   maxGuest     Int
   reservations TripReservation[]
   countryCode  String
-  recomended   Boolean           @default(false)
+  recommended  Boolean           @default(false)
 }
 
 model TripReservation {

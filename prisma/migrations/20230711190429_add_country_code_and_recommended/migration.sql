@@ -6,4 +6,4 @@
 */
 -- AlterTable
 ALTER TABLE "Trip" ADD COLUMN     "countryCode" TEXT NOT NULL,
-ADD COLUMN     "recomended" BOOLEAN NOT NULL DEFAULT false;
+ADD COLUMN     "recommended" BOOLEAN NOT NULL DEFAULT false;
