@@ -1,5 +1,6 @@
 import { Trip } from "@prisma/client";
 import React from "react";
+import Link from "next/link";
 import Image from "next/image";
 import ReactCountryFlag from "react-country-flag";
 
@@ -9,6 +10,7 @@ interface TripItemProps{
 
 const TripItem = ({trip}: TripItemProps) => {
     return(
+       <Link href= {`/trips/${trip.id}`}>
         <div className="flex flex-col">
             <div className="relative h-[280px] w-[280px]">
                 <Image src={trip.coverImage} className="rounded-lg shadow-md" style={{objectFit:"cover",}} fill alt={trip.name}/>
@@ -24,6 +26,7 @@ const TripItem = ({trip}: TripItemProps) => {
                 por dia
             </p>
         </div>
+       </Link>
     )
 };
 
