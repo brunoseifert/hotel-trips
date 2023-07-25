@@ -48,7 +48,6 @@ const TripConfirmation = ({ params }: { params: { tripId: string } }) => {
 
     if (status === "unauthenticated") {
       router.push("/");
-      toast.warning("Necessário fazer login!", { position: "bottom-center" })
     }
 
     fetchTrip();
