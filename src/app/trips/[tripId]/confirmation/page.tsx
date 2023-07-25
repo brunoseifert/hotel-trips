@@ -47,7 +47,7 @@ const TripConfirmation = ({ params }: { params: { tripId: string } }) => {
     };
 
     if (status === "unauthenticated") {
-      router.push("/");
+      return toast.warning("Necessário realizar o login para prosseguir!", { position: "bottom-center" });
     }
 
     fetchTrip();
