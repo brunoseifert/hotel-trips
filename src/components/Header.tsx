@@ -38,12 +38,12 @@ const Header = () => {
         <div className="flex items-center gap-3 border-grayLighter border border-solid rounded-full p-2 px-3 relative">
           <AiOutlineMenu size={16} onClick={handleMenuClick} className="cursor-pointer" />
 
-          <Image height={30} width={30} src={data.user.image!} alt={data.user.name!} className="rounded-full shadow-md" />
+          <Image height={35} width={35} src={data.user.image!} alt={data.user.name!} className="rounded-full shadow-md" />
 
           {menuIsOpen && (
             <div className="z-50 absolute top-14 left-0 w-full h-[100px] bg-white rounded-lg shadow-md flex flex-col justify-center items-center">
               <Link href="/my-trips" onClick={() => setMenuIsOpen(false)}>
-                <button className="text-primary pb-2 border-b border-grayLighter border-solid text-sm font-medium">Minhas Viagens</button>
+                <button className="text-primary pb-2 border-b border-grayLighter border-solid text-sm font-semibold">Minhas Viagens</button>
               </Link>
 
               <button className="text-primary pt-2 text-sm font-semibold" onClick={handleLogoutClick}>
