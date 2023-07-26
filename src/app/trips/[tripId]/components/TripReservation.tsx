@@ -150,7 +150,8 @@ const TripReservation = ({ tripId, maxGuests, tripStartDate, tripEndDate, priceP
         className="mt-4"
         error={!!errors?.guests}
         errorMessage={errors?.guests?.message}
-        type="number"
+        type="number" minLength={1} min={1} max={maxGuests}
+        
       />
 
       <div className="flex justify-between mt-3">
