@@ -128,7 +128,8 @@ const TripReservation = ({ tripId, maxGuests, tripStartDate, tripEndDate, priceP
               selected={field.value}
               placeholderText="Data Final"
               className="w-full"
-              minDate={startDate}
+              minDate={startDate ?? tripStartDate}
+              maxDate={tripEndDate}
             />
           )}
         />
@@ -149,7 +150,7 @@ const TripReservation = ({ tripId, maxGuests, tripStartDate, tripEndDate, priceP
         className="mt-4"
         error={!!errors?.guests}
         errorMessage={errors?.guests?.message}
-        type="number" minLength={1} min={1} max={maxGuests} defaultValue={1}
+        type="number" minLength={1} min={1} max={maxGuests}
         
       />
 
