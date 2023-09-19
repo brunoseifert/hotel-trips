@@ -20,12 +20,13 @@ const TripSearch = () => {
   const {
     control,
     formState: { errors },
-    register,
     handleSubmit,
   } = useForm<TripSearchForm>();
 
   const onSubmit = (data: TripSearchForm) => {
-    router.push(`/trips/search?text=${data.text}&startDate=${data.startDate?.toISOString()}&budget=${data.budget}`);
+    const { text, startDate, budget } = data;
+    const startDateISO = startDate?.toISOString();
+    router.push(`/trips/search?text=${text}&startDate=${startDateISO}&budget=${budget}`);
   };
 
   return (
@@ -52,7 +53,13 @@ const TripSearch = () => {
             name="startDate"
             control={control}
             render={({ field }) => (
-              <DatePicker onChange={field.onChange} selected={field.value} placeholderText="Data Final" className="w-full" minDate={new Date()} />
+              <DatePicker
+                onChange={field.onChange}
+                selected={field.value}
+                placeholderText="Data Inicial" // Corrigi para "Data Inicial"
+                className="w-full"
+                minDate={new Date()}
+              />
             )}
           />
 
@@ -71,7 +78,7 @@ const TripSearch = () => {
           />
         </div>
 
-        <Button onClick={() => handleSubmit(onSubmit)()} className="w-1/2 lg:h-fit">
+        <Button onClick={handleSubmit(onSubmit)} className="w-1/2 lg:h-fit">
           Buscar
         </Button>
       </div>
