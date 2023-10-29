@@ -3,7 +3,6 @@
 import Button from '@/components/Button';
 import DatePicker from '@/components/DatePicker';
 import Input from '@/components/Input';
-import { Trip } from '@prisma/client';
 import { add, addDays, differenceInDays, max } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import React from 'react';
@@ -15,7 +14,6 @@ interface TripReservationProps {
   tripEndDate: Date;
   maxGuests: number;
   pricePerDay: number;
-  trip: Trip;
 }
 
 interface TripReservationForm {
@@ -65,20 +63,6 @@ const TripReservation = ({
       return setError('endDate', {
         type: 'manual',
         message: 'Esta data já está reservada.',
-      });
-    }
-
-    if (res?.error?.code === 'INVALID_START_DATE') {
-      return setError('startDate', {
-        type: 'manual',
-        message: 'Data inválida.',
-      });
-    }
-
-    if (res?.error?.code === 'INVALID_END_DATE') {
-      return setError('endDate', {
-        type: 'manual',
-        message: 'Data inválida.',
       });
     }
 
