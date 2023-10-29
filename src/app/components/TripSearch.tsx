@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import Button from "@/components/Button";
-import CurrencyInput from "@/components/CurrencyInput";
-import DatePicker from "@/components/DatePicker";
-import Input from "@/components/Input";
-import { useRouter } from "next/navigation";
-import React from "react";
-import { Controller, useForm } from "react-hook-form";
+import Button from '@/components/Button';
+import CurrencyInput from '@/components/CurrencyInput';
+import DatePicker from '@/components/DatePicker';
+import Input from '@/components/Input';
+import { useRouter } from 'next/navigation';
+import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
 
 interface TripSearchForm {
   text: string;
@@ -25,7 +25,11 @@ const TripSearch = () => {
   } = useForm<TripSearchForm>();
 
   const onSubmit = (data: TripSearchForm) => {
-    router.push(`/trips/search?text=${data.text}&startDate=${data.startDate?.toISOString()}&budget=${data.budget}`);
+    router.push(
+      `/trips/search?text=${
+        data.text
+      }&startDate=${data.startDate?.toISOString()}&budget=${data.budget}`
+    );
   };
 
   return (
@@ -39,10 +43,10 @@ const TripSearch = () => {
           placeholder="Onde você quer ir?"
           error={!!errors.text}
           errorMessage={errors.text?.message}
-          {...register("text", {
+          {...register('text', {
             required: {
               value: true,
-              message: "Texto é obrigatório.",
+              message: 'Texto é obrigatório.',
             },
           })}
         />
@@ -52,7 +56,13 @@ const TripSearch = () => {
             name="startDate"
             control={control}
             render={({ field }) => (
-              <DatePicker onChange={field.onChange} selected={field.value} placeholderText="Data Final" className="w-full" minDate={new Date()} />
+              <DatePicker
+                onChange={field.onChange}
+                selected={field.value}
+                placeholderText="Data Final"
+                className="w-full"
+                minDate={new Date()}
+              />
             )}
           />
 
@@ -71,7 +81,10 @@ const TripSearch = () => {
           />
         </div>
 
-        <Button onClick={() => handleSubmit(onSubmit)()} className="w-1/2 lg:h-fit">
+        <Button
+          onClick={() => handleSubmit(onSubmit)()}
+          className="w-full lg:h-fit"
+        >
           Buscar
         </Button>
       </div>
