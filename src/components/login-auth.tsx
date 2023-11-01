@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Icons } from '@/components/icons';
 import { signIn } from 'next-auth/react';
 import Button from './Button';
+import { Icons } from './icons';
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
