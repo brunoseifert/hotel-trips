@@ -3,9 +3,10 @@
 import Button from '@/components/Button';
 import DatePicker from '@/components/DatePicker';
 import Input from '@/components/Input';
-import { add, addDays, differenceInDays, max } from 'date-fns';
+import { add, differenceInDays } from 'date-fns';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 interface TripReservationProps {
@@ -18,8 +19,8 @@ interface TripReservationProps {
 
 interface TripReservationForm {
   guests: number;
-  startDate: Date;
-  endDate: Date;
+  startDate: Date | null;
+  endDate: Date | null;
 }
 
 const TripReservation = ({
@@ -29,6 +30,13 @@ const TripReservation = ({
   tripEndDate,
   pricePerDay,
 }: TripReservationProps) => {
+  const [isCreatingCheckoutSession, setisCreatingCheckoutSession] =
+    useState(false);
+
+  const { data } = useSession();
+
+  const session = data;
+
   const {
     register,
     handleSubmit,
@@ -41,6 +49,12 @@ const TripReservation = ({
   const router = useRouter();
 
   const onSubmit = async (data: TripReservationForm) => {
+    if (!session?.user) {
+      return alert('Faça login para realizar uma reserva!');
+    }
+
+    setisCreatingCheckoutSession(true);
+
     const response = await fetch('/api/trips/check', {
       method: 'POST',
       body: Buffer.from(
@@ -60,9 +74,29 @@ const TripReservation = ({
         message: 'Esta data já está reservada.',
       });
 
+      setisCreatingCheckoutSession(false);
+
       return setError('endDate', {
         type: 'manual',
         message: 'Esta data já está reservada.',
+      });
+    }
+
+    if (res?.error?.code === 'INVALID_START_DATE') {
+      setisCreatingCheckoutSession(false);
+
+      return setError('startDate', {
+        type: 'manual',
+        message: 'Data inválida.',
+      });
+    }
+
+    if (res?.error?.code === 'INVALID_END_DATE') {
+      setisCreatingCheckoutSession(false);
+
+      return setError('endDate', {
+        type: 'manual',
+        message: 'Data inválida.',
       });
     }
 
@@ -75,8 +109,6 @@ const TripReservation = ({
 
   const startDate = watch('startDate');
   const endDate = watch('endDate');
-  const maxDate = new Date();
-  maxDate.setMonth(maxDate.getMonth() + 3);
 
   return (
     <div className="flex flex-col px-5 lg:min-w-[380px] lg:p-5 lg:border-grayLighter lg:border lg:rounded-lg lg:shadow-md">
@@ -100,10 +132,9 @@ const TripReservation = ({
               errorMessage={errors?.startDate?.message}
               onChange={field.onChange}
               selected={field.value}
-              placeholderText="Data inicial"
+              placeholderText="Data de Início"
               className="w-full"
-              minDate={new Date() ?? tripStartDate}
-              maxDate={maxDate}
+              minDate={new Date()}
             />
           )}
         />
@@ -125,8 +156,10 @@ const TripReservation = ({
               selected={field.value}
               placeholderText="Data Final"
               className="w-full"
-              maxDate={maxDate}
-              minDate={addDays(startDate ?? tripStartDate, 1) ?? tripEndDate}
+              maxDate={tripEndDate}
+              // minDate={startDate ?? tripStartDate}
+              minDate={add(startDate!, { days: 1 })}
+              disabled={!startDate}
             />
           )}
         />
@@ -148,6 +181,7 @@ const TripReservation = ({
         error={!!errors?.guests}
         errorMessage={errors?.guests?.message}
         type="number"
+        max={maxGuests}
       />
 
       <div className="flex justify-between mt-3">
@@ -162,6 +196,7 @@ const TripReservation = ({
       <div className="pb-10 border-b border-b-grayLighter w-full lg:border-none lg:pb-0">
         <Button
           onClick={() => handleSubmit(onSubmit)()}
+          disabled={isCreatingCheckoutSession}
           className="mt-3 w-full"
         >
           Reservar agora

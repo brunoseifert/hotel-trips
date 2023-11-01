@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { prisma } from '@/lib/prisma';
+import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   const req = await request.json();
@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     return new NextResponse(
       JSON.stringify({
         error: {
-          code: "TRIP_NOT_FOUND",
+          code: 'TRIP_NOT_FOUND',
         },
       })
     );
