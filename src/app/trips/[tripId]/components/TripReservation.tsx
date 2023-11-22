@@ -3,7 +3,7 @@
 import Button from '@/components/Button';
 import DatePicker from '@/components/DatePicker';
 import Input from '@/components/Input';
-import { add, differenceInDays } from 'date-fns';
+import { add, differenceInDays, isAfter } from 'date-fns';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -120,10 +120,7 @@ const TripReservation = ({
         <Controller
           name="startDate"
           rules={{
-            required: {
-              value: true,
-              message: 'Data inicial é obrigatória.',
-            },
+            required: 'Data de início é obrigatória',
           }}
           control={control}
           render={({ field }) => (
@@ -142,10 +139,12 @@ const TripReservation = ({
         <Controller
           name="endDate"
           rules={{
-            required: {
-              value: true,
-              message: 'Data final é obrigatória.',
-            },
+            required: 'Data final é obrigatória',
+            validate: (value) =>
+              !value ||
+              !startDate ||
+              isAfter(new Date(value), new Date(startDate)) ||
+              'Data final anterior a data inicial',
           }}
           control={control}
           render={({ field }) => (
@@ -156,10 +155,8 @@ const TripReservation = ({
               selected={field.value}
               placeholderText="Data Final"
               className="w-full"
-              maxDate={tripEndDate}
-              // minDate={startDate ?? tripStartDate}
-              minDate={add(startDate!, { days: 1 })}
-              disabled={!startDate}
+              maxDate={add(new Date(), { years: 1 })}
+              minDate={startDate ? new Date(startDate) : new Date()}
             />
           )}
         />

@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { differenceInDays, isBefore } from 'date-fns';
+import { differenceInDays, isAfter, isBefore } from 'date-fns';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
@@ -17,7 +17,10 @@ export async function POST(request: Request) {
         error: {
           code: 'TRIP_NOT_FOUND',
         },
-      })
+      }),
+      {
+        status: 404,
+      }
     );
   }
 
@@ -34,7 +37,7 @@ export async function POST(request: Request) {
     );
   }
 
-  if (isBefore(new Date(trip.endDate), new Date(req.endDate))) {
+  if (isAfter(new Date(trip.endDate), new Date(req.endDate))) {
     return new NextResponse(
       JSON.stringify({
         error: {
@@ -47,10 +50,23 @@ export async function POST(request: Request) {
     );
   }
 
+  if (isBefore(new Date(req.endDate), new Date(req.startDate))) {
+    return new NextResponse(
+      JSON.stringify({
+        error: {
+          code: 'END_DATE_BEFORE_START_DATE',
+        },
+      }),
+      {
+        status: 400,
+      }
+    );
+  }
+
   const reservations = await prisma.tripReservation.findMany({
     where: {
+      //Verifica se existe reserva entre as datas.
       tripId: req.tripId,
-      // VERIFICA SE EXISTE RESERVA ENTRE AS DATAS
       startDate: {
         lte: new Date(req.endDate),
       },

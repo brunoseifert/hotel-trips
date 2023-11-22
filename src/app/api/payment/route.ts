@@ -1,18 +1,26 @@
-import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
-import Stripe from "stripe";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { getServerSession } from 'next-auth';
+import { NextResponse } from 'next/server';
+import Stripe from 'stripe';
+import { authOptions } from '../auth/[...nextauth]/route';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2022-11-15",
+  apiVersion: '2022-11-15',
 });
 
 export async function POST(request: Request) {
   const userSession = await getServerSession(authOptions);
-
   const req = await request.json();
 
-  const { tripId, totalPrice, name, description, coverImage, startDate, endDate, guests } = req;
+  const {
+    tripId,
+    totalPrice,
+    name,
+    description,
+    coverImage,
+    startDate,
+    endDate,
+    guests,
+  } = req;
 
   const session = await stripe.checkout.sessions.create({
     success_url: process.env.HOST_URL!,
@@ -27,7 +35,7 @@ export async function POST(request: Request) {
     line_items: [
       {
         price_data: {
-          currency: "brl",
+          currency: 'brl',
           unit_amount: totalPrice * 100,
           product_data: {
             name,
@@ -38,8 +46,10 @@ export async function POST(request: Request) {
         quantity: 1,
       },
     ],
-    mode: "payment",
+    mode: 'payment',
   });
 
-  return new NextResponse(JSON.stringify({ sessionId: session.id }), { status: 200 });
+  return new NextResponse(JSON.stringify({ sessionId: session.id }), {
+    status: 200,
+  });
 }

@@ -20,5 +20,7 @@ export async function DELETE(
     },
   });
 
-  return new NextResponse(JSON.stringify(reservation), { status: 200 });
+  return new NextResponse(JSON.stringify(reservation), {
+    status: 200,
+  });
 }
