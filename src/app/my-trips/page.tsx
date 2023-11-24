@@ -1,14 +1,15 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Prisma } from '@prisma/client';
-import UserReservationItem from './components/UserReservationItem';
-import Button from '@/components/Button';
 import Link from 'next/link';
 
-function MyTrips() {
+import UserReservationItem from './components/UserReservationItem';
+import Button from '@/components/Button';
+
+const MyTrips = () => {
   const [reservations, setReservations] = useState<
     Prisma.TripReservationGetPayload<{
       include: { trip: true };
@@ -23,11 +24,13 @@ function MyTrips() {
     const response = await fetch(
       `/api/user/${(data?.user as any)?.id}/reservations`
     );
+
     const json = await response.json();
 
     setReservations(json);
   };
 
+  console.log({ reservations });
   useEffect(() => {
     if (status === 'unauthenticated') {
       return router.push('/');
@@ -35,8 +38,6 @@ function MyTrips() {
 
     fetchReservations();
   }, [status]);
-
-  console.log(reservations);
 
   return (
     <div className="container mx-auto p-5">
@@ -47,25 +48,25 @@ function MyTrips() {
         <div className="flex flex-col lg:grid lg:grid-cols-3 lg:gap-14">
           {reservations?.map((reservation) => (
             <UserReservationItem
+              fetchReservations={fetchReservations}
               key={reservation.id}
               reservation={reservation}
-              fetchReservations={fetchReservations}
             />
           ))}
         </div>
       ) : (
         <div className="flex flex-col lg:max-w-[500px]">
-          <p className=" mt-3 font-medium text-primaryDarker">
-            Você ainda não tem nenhuma reserva!
+          <p className="mt-2 font-medium text-primaryDarker">
+            Você ainda não tem nenhuma reserva! =(
           </p>
 
           <Link href="/">
-            <Button className="w-full mt-4 lg:mt-5">Fazer reserva</Button>
+            <Button className="w-full mt-2 lg:mt-5">Fazer reserva</Button>
           </Link>
         </div>
       )}
     </div>
   );
-}
+};
 
 export default MyTrips;

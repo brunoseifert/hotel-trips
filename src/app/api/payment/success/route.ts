@@ -9,7 +9,11 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 export async function POST(request: Request) {
   const sig = request.headers.get('stripe-signature')!;
 
+  console.log({ sig });
+
   const text = await request.text();
+
+  console.log({ text });
 
   const event = stripe.webhooks.constructEvent(
     text,
@@ -19,6 +23,8 @@ export async function POST(request: Request) {
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as any;
+
+    console.log({ session });
 
     await prisma.tripReservation.create({
       data: {

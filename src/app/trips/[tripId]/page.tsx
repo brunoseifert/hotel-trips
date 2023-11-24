@@ -29,7 +29,7 @@ const TripDetails = async ({ params }: { params: { tripId: string } }) => {
         <div className="lg:order-2">
           <TripReservation
             tripId={trip.id}
-            pricePerDay={trip.pricePerDay as any}
+            pricePerDay={trip.pricePerDay.toNumber() as any} // Converter para número
             tripStartDate={trip.startDate}
             tripEndDate={trip.endDate}
             maxGuests={trip.maxGuests}
