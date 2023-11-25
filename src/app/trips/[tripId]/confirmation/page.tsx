@@ -51,7 +51,7 @@ const TripConfirmation = ({ params }: { params: { tripId: string } }) => {
 
     if (status === 'unauthenticated') {
       router.push('/');
-    }
+      toast.error('Faça login para realizar uma reserva!') }
 
     fetchTrip();
   }, [status, searchParams, params, router]);

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Prisma } from '@prisma/client';
@@ -10,34 +10,49 @@ import UserReservationItem from './components/UserReservationItem';
 import Button from '@/components/Button';
 
 const MyTrips = () => {
+  const { status, data } = useSession();
+  const router = useRouter();
   const [reservations, setReservations] = useState<
     Prisma.TripReservationGetPayload<{
       include: { trip: true };
     }>[]
   >([]);
 
-  const { status, data } = useSession();
+  // Usando useCallback para envolver a definição da função
+  const fetchReservations = useCallback(async () => {
+    try {
+      const response = await fetch(
+        `/api/user/${(data?.user as any)?.id}/reservations`
+      );
 
-  const router = useRouter();
+      if (!response.ok) {
+        throw new Error('Failed to fetch reservations');
+      }
 
-  const fetchReservations = async () => {
-    const response = await fetch(
-      `/api/user/${(data?.user as any)?.id}/reservations`
-    );
-
-    const json = await response.json();
-
-    setReservations(json);
-  };
-
-  console.log({ reservations });
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      return router.push('/');
+      const json = await response.json();
+      setReservations(json);
+    } catch (error) {
+      console.error('Error fetching reservations:', error);
+      // Adicione lógica para lidar com erros, por exemplo, exibir uma mensagem para o usuário
     }
+  }, [data?.user]);
 
-    fetchReservations();
-  }, [status]);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (status === 'unauthenticated') {
+        return router.push('/');
+      }
+
+      if (status === 'authenticated' && !data?.user) {
+        // Lógica para lidar com o caso em que o usuário autenticado não tem dados
+      }
+
+      fetchReservations();
+    };
+
+    fetchData();
+  }, [status, data?.user, fetchReservations, router]);
+
 
   return (
     <div className="container mx-auto p-5">

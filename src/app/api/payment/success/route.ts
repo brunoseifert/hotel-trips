@@ -8,35 +8,39 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST(request: Request) {
   const sig = request.headers.get('stripe-signature')!;
+  console.log('Received webhook event:', sig);
 
-  console.log({ sig });
+  try {
+    const text = await request.text();
+    const event = stripe.webhooks.constructEvent(
+      text,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET_KEY as string
+    );
+    console.log('Received event:', event);
 
-  const text = await request.text();
+    if (event.type === 'checkout.session.completed') {
+      const session = event.data.object as any;
 
-  console.log({ text });
+      console.log('Received checkout.session.completed event:', session);
 
-  const event = stripe.webhooks.constructEvent(
-    text,
-    sig,
-    process.env.STRIPE_WEBHOOK_SECRET_KEY!
-  );
+      await prisma.tripReservation.create({
+        data: {
+          startDate: new Date(session.metadata.startDate),
+          endDate: new Date(session.metadata.endDate),
+          userId: session.metadata.userId,
+          tripId: session.metadata.tripId,
+          totalPaid: Number(session.metadata.totalPrice),
+          guests: Number(session.metadata.guests),
+        },
+      });
 
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object as any;
+      console.log('Reservation created successfully:', session);
+    }
 
-    console.log({ session });
-
-    await prisma.tripReservation.create({
-      data: {
-        tripId: session.metadata.tripId,
-        startDate: new Date(session.metadata.startDate),
-        endDate: new Date(session.metadata.endDate),
-        userId: session.metadata.userId,
-        totalPaid: Number(session.metadata.totalPrice),
-        guests: Number(session.metadata.guests),
-      },
-    });
+    return new NextResponse(JSON.stringify({ received: true }), { status: 200 });
+  } catch (error) {
+    console.error('Error processing webhook event:', error);
+    return new NextResponse(JSON.stringify({ error: 'Failed to process event' }), { status: 500 });
   }
-
-  return new NextResponse(JSON.stringify({ received: true }), { status: 200 });
 }
