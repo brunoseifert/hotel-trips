@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Hotel Trips : Sistema de reservas de viagens!
 
-## Getting Started
+Bem-vindo ao meu projeto! Um aplicativo empolgante que permite aos usuários procurar, selecionar e reservar viagens. Esta aplicação integra autenticação segura, processamento de pagamentos, gerenciamento de dados e armazenamento de dados para criar uma experiência de reserva de viagens completa e eficaz.
 
-First, run the development server:
+## Tecnologias Utilizadas
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+- [Next.js](https://nextjs.org/) - O framework React para produção.
+- [NextAuth](https://next-auth.js.org/) - Um pacote para autenticação em Next.js.
+- [Stripe](https://stripe.com/) - Plataforma de pagamentos online.
+- [Tailwind CSS](https://tailwindcss.com/) - Um framework CSS utilitário.
+- [Prisma](https://www.prisma.io/) - ORM (Object-Relational Mapping) moderno para Node.js e TypeScript.
+- [Supabase](https://supabase.io/) - Plataforma de banco de dados para desenvolvedores.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Funcionalidades Principais
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Pesquisa de Viagens:** Os usuários podem procurar por destinos incriveis e visualizar detalhes sobre as viagens disponíveis.
 
-[http://localhost:3000/api/hello](http://localhost:3000/api/hello) is an endpoint that uses [Route Handlers](https://beta.nextjs.org/docs/routing/route-handlers). This endpoint can be edited in `app/api/hello/route.ts`.
+- **Reserva Conveniente:** Facilitamos a reserva de viagens com um processo simples e eficiente.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- **Autenticação Segura:** Utilizamos o NextAuth para garantir a autenticação segura dos usuários.
 
-## Learn More
+- **Processamento de Pagamentos:** Integramos o Stripe para processar pagamentos de forma segura e eficaz.
 
-To learn more about Next.js, take a look at the following resources:
+- **Gerenciamento de Dados:** O Prisma é utilizado para gerenciar dados de forma eficiente, garantindo a consistência e integridade dos dados.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Armazenamento de Dados:** Utilizamos o Supabase para armazenamento de dados, garantindo escalabilidade e confiabilidade.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Instalação
 
-## Deploy on Vercel
+1. Clone o repositório: `git clone https://github.com/seu-usuario/seu-repositorio.git`
+2. Instale as dependências: `npm install`
+3. Configuração: Siga as instruções no arquivo `.env.example` para configurar suas variáveis de ambiente.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Uso
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1. Inicie o aplicativo: `npm run dev`
+2. Acesse [http://localhost:3000](http://localhost:3000) no seu navegador.
+
+## Contribuição
+
+Estou aberto a contribuições! Fico grato desde já.
+
