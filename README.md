@@ -1,6 +1,6 @@
 # Hotel Trips : Sistema de reservas de viagens!
 
-Bem-vindo ao meu projeto! Um aplicativo empolgante que permite aos usuários procurar, selecionar e reservar viagens. Esta aplicação integra autenticação segura, processamento de pagamentos, gerenciamento de dados e armazenamento de dados para criar uma experiência de reserva de viagens completa e eficaz.
+Bem-vindo ao meu projeto! Um aplicativo que permite aos usuários procurar, selecionar e reservar viagens. Esta aplicação integra autenticação segura, processamento de pagamentos, gerenciamento de dados e armazenamento de dados para criar uma experiência de reserva de viagens completa e eficaz.
 
 ## Tecnologias Utilizadas
 
