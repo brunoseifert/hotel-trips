@@ -4,7 +4,13 @@ const nextConfig = {
     appDir: true,
   },
   images: {
-    domains: ['cf.bstatic.com'],
+    domains: [
+      'cf.bstatic.com',
+      'imgcy.trivago.com',
+      'lh3.googleusercontent.com',
+      'images.unsplash.com',
+      'a0.muscache.com',
+    ],
 
     remotePatterns: [
       {
