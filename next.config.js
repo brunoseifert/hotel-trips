@@ -3,14 +3,8 @@ const nextConfig = {
   experimental: {
     appDir: true,
   },
-  async rewrites() {
-    return [
-      {
-        source: "/api/trips/search",
-        destination: "/src/app/api/trips/search/route.ts",
-      },
-    ];
-  },
+  reactStrictMode: true,
+  swcMinify: true,
   images: {
     domains: [
       "cf.bstatic.com",
