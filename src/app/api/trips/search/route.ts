@@ -1,56 +1,26 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-const generateSearchQuery = (text: string, startDate?: string | null, budget?: string | null) => {
+const generateSearchQuery = (
+  text: string,
+  startDate?: string | null,
+  budget?: string | null
+) => {
   let searchQuery: any = {
     OR: [
-      {
-        name: {
-          search: text,
-        },
-      },
-      {
-        description: {
-          search: text,
-        },
-      },
-      {
-        location: {
-          search: text,
-        },
-      },
+      { name: { search: text } },
+      { description: { search: text } },
+      { location: { search: text } },
     ],
     AND: [],
   };
 
-  if (startDate !== "undefined" && startDate !== "null") {
-    searchQuery = {
-      ...searchQuery,
-      AND: [
-        ...searchQuery.AND,
-        {
-          startDate: {
-            gte: startDate,
-          },
-        },
-      ],
-    };
+  if (startDate) {
+    searchQuery.AND.push({ startDate: { gte: new Date(startDate) } });
   }
 
-  console.log({ budget });
-
-  if (budget !== "undefined" && budget !== "null") {
-    searchQuery = {
-      ...searchQuery,
-      AND: [
-        ...searchQuery.AND,
-        {
-          pricePerDay: {
-            lte: Number(budget),
-          },
-        },
-      ],
-    };
+  if (budget) {
+    searchQuery.AND.push({ pricePerDay: { lte: Number(budget) } });
   }
 
   return searchQuery;
@@ -65,16 +35,21 @@ export async function GET(request: Request) {
 
   if (!text) {
     return new NextResponse(
-      JSON.stringify({
-        message: "Missing text parameter",
-      }),
+      JSON.stringify({ message: "Missing text parameter" }),
       { status: 400 }
     );
   }
 
-  const trips = await prisma.trip.findMany({
-    where: generateSearchQuery(text, startDate, budget),
-  });
+  try {
+    const trips = await prisma.trip.findMany({
+      where: generateSearchQuery(text, startDate, budget),
+    });
 
-  return new NextResponse(JSON.stringify(trips), { status: 200 });
+    return new NextResponse(JSON.stringify(trips), { status: 200 });
+  } catch (error) {
+    return new NextResponse(
+      JSON.stringify({ message: "An error occurred while fetching data" }),
+      { status: 500 }
+    );
+  }
 }

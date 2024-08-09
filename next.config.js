@@ -1,6 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  experimental: {
+    appDir: true,
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/api/trips/search",
+        destination: "/src/app/api/trips/search/route.ts",
+      },
+    ];
+  },
   images: {
     domains: [
       "cf.bstatic.com",
