@@ -1,6 +1,4 @@
-"use client"; // Deve ser a primeira linha do arquivo
-
-export const dynamic = "force-dynamic";
+"use client";
 
 import TripItem from "@/components/TripItem";
 import { Trip } from "@prisma/client";
